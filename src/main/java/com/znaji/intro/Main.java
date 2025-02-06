@@ -8,6 +8,6 @@ public class Main {
         Duck rubberDuck = new RubberDuck();
 
         rubberDuck.display();
-        rubberDuck.fly();
+        ((Flyable)mallard).fly();
     }
 }

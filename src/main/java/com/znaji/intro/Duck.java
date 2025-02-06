@@ -12,7 +12,4 @@ public class Duck {
 
     public void display() {}
 
-    public void fly() {
-        System.out.println("This duck fly!!!");
-    }
 }
