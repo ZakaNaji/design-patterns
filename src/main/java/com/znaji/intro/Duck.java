@@ -1,15 +1,17 @@
 package com.znaji.intro;
 
-public class Duck {
+public abstract class Duck {
 
-    public void swim() {
-        System.out.println("this duck swims");
+    protected FlyingBehaviour flyingBehaviour;
+
+    protected void setFlyingBehaviour(FlyingBehaviour flyingBehaviour) {
+        this.flyingBehaviour = flyingBehaviour;
     }
 
-    public void quack() {
-        System.out.println("this duck quacks");
+    public void performFlying() {
+        flyingBehaviour.fly();
     }
 
-    public void display() {}
+    public abstract void display();
 
 }

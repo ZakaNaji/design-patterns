@@ -7,7 +7,11 @@ public class Main {
         Duck redHead = new RedHeadDuck();
         Duck rubberDuck = new RubberDuck();
 
-        rubberDuck.display();
-        ((Flyable)mallard).fly();
+        mallard.setFlyingBehaviour(new FlyWithWings());
+        mallard.performFlying();
+
+        rubberDuck.setFlyingBehaviour(new CantFly());
+        rubberDuck.performFlying();
+
     }
 }
