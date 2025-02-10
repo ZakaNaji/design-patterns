@@ -5,8 +5,8 @@ public class WeatherStation {
     public static void main(String[] args) throws InterruptedException {
         var weatherData = new WeatherData();
 
-        var currentConditionsDisplay = new CurrentConditionsDisplay();
-        var statisticsDisplay = new StatisticsDisplay();
+        var currentConditionsDisplay = new CurrentConditionsDisplay(weatherData);
+        var statisticsDisplay = new StatisticsDisplay(weatherData);
 
         weatherData.registerObserver(currentConditionsDisplay);
         weatherData.registerObserver(statisticsDisplay);

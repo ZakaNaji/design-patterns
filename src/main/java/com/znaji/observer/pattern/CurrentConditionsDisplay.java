@@ -1,13 +1,20 @@
 package com.znaji.observer.pattern;
 
 public class CurrentConditionsDisplay implements Observer, Displayable{
+
+    private final WeatherData weatherData;
     private double temperature;
     private double humidity;
 
+    public CurrentConditionsDisplay(WeatherData weatherData) {
+        this.weatherData = weatherData;
+    }
+
+
     @Override
-    public void update(double temperature, double humidity, double p) {
-        this.temperature = temperature;
-        this.humidity = humidity;
+    public void update() {
+        this.temperature = weatherData.getTemperature();
+        this.humidity = weatherData.getHumidity();
 
         display();
     }
