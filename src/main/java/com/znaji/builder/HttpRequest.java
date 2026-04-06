@@ -11,16 +11,75 @@ package com.znaji.builder;
  * String authorizationHeader
  */
 public class HttpRequest {
-    private HttpMethod method;
-    private String url;
-    private String body;
-    private int timeoutMillis;
-    private boolean followRedirects;
-    private String contentType;
-    private String accept;
-    private String authorizationHeader;
+    private final HttpMethod method;
+    private final String url;
+    private final String body;
+    private final int timeoutMillis;
+    private final boolean followRedirects;
+    private final String contentType;
+    private final String accept;
+    private final String authorizationHeader;
 
+    private HttpRequest(HttpMethod method, String url, String body, int timeoutMillis, boolean followRedirects, String contentType, String accept, String authorizationHeader) {
+        this.method = method;
+        this.url = url;
+        this.body = body;
+        this.timeoutMillis = timeoutMillis;
+        this.followRedirects = followRedirects;
+        this.contentType = contentType;
+        this.accept = accept;
+        this.authorizationHeader = authorizationHeader;
+    }
 
+    public static class Builder {
+        private final HttpMethod method;
+        private final String url;
+        private String body = "";
+        private int timeoutMillis = 0;
+        private boolean followRedirects = false;
+        private String contentType = "";
+        private String accept = "";
+        private String authorizationHeader = "";
+
+        public Builder(HttpMethod method, String url) {
+            this.method = method;
+            this.url = url;
+        }
+
+        public Builder body(String body) {
+            this.body = body;
+            return this;
+        }
+
+        public Builder timeoutMillis(int timeoutMillis) {
+            this.timeoutMillis = timeoutMillis;
+            return this;
+        }
+
+        public Builder followRedirects(boolean followRedirects) {
+            this.followRedirects = followRedirects;
+            return this;
+        }
+
+        public Builder contentType(String contentType) {
+            this.contentType = contentType;
+            return this;
+        }
+
+        public Builder accept(String accept) {
+            this.accept = accept;
+            return this;
+        }
+
+        public Builder authorizationHeader(String authorizationHeader) {
+            this.authorizationHeader = authorizationHeader;
+            return this;
+        }
+
+        public HttpRequest build() {
+            return new HttpRequest(method, url, body, timeoutMillis, followRedirects, contentType, accept, authorizationHeader);
+        }
+    }
 
     @Override
     public String toString() {
@@ -68,35 +127,5 @@ public class HttpRequest {
         return authorizationHeader;
     }
 
-    public void setMethod(HttpMethod method) {
-        this.method = method;
-    }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    public void setTimeoutMillis(int timeoutMillis) {
-        this.timeoutMillis = timeoutMillis;
-    }
-
-    public void setFollowRedirects(boolean followRedirects) {
-        this.followRedirects = followRedirects;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public void setAccept(String accept) {
-        this.accept = accept;
-    }
-
-    public void setAuthorizationHeader(String authorizationHeader) {
-        this.authorizationHeader = authorizationHeader;
-    }
 }
