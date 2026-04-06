@@ -14,13 +14,13 @@ public class HttpRequest {
     private final HttpMethod method;
     private final String url;
     private final String body;
-    private final int timeoutMillis;
+    private final Integer timeoutMillis;
     private final boolean followRedirects;
     private final String contentType;
     private final String accept;
     private final String authorizationHeader;
 
-    private HttpRequest(HttpMethod method, String url, String body, int timeoutMillis, boolean followRedirects, String contentType, String accept, String authorizationHeader) {
+    private HttpRequest(HttpMethod method, String url, String body, Integer timeoutMillis, boolean followRedirects, String contentType, String accept, String authorizationHeader) {
         this.method = method;
         this.url = url;
         this.body = body;
@@ -34,12 +34,12 @@ public class HttpRequest {
     public static class Builder {
         private final HttpMethod method;
         private final String url;
-        private String body = "";
-        private int timeoutMillis = 0;
+        private String body;
+        private Integer timeoutMillis = null;
         private boolean followRedirects = false;
-        private String contentType = "";
-        private String accept = "";
-        private String authorizationHeader = "";
+        private String contentType;
+        private String accept;
+        private String authorizationHeader;
 
         public Builder(HttpMethod method, String url) {
             this.method = method;
@@ -83,15 +83,16 @@ public class HttpRequest {
 
     @Override
     public String toString() {
+        //should print true null
         return "HttpRequest{" +
                 "method=" + method +
-                ", url='" + url + '\'' +
-                ", body='" + body + '\'' +
+                ", url=" + url +
+                ", body=" + body +
                 ", timeoutMillis=" + timeoutMillis +
                 ", followRedirects=" + followRedirects +
-                ", contentType='" + contentType + '\'' +
-                ", accept='" + accept + '\'' +
-                ", authorizationHeader='" + authorizationHeader + '\'' +
+                ", contentType=" + contentType +
+                ", accept=" + accept +
+                ", authorizationHeader=" + authorizationHeader +
                 '}';
     }
 
