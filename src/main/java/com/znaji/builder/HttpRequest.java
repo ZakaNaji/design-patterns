@@ -77,7 +77,36 @@ public class HttpRequest {
         }
 
         public HttpRequest build() {
+            validate();
             return new HttpRequest(method, url, body, timeoutMillis, followRedirects, contentType, accept, authorizationHeader);
+        }
+
+        private void validate() {
+            if (method == null) {
+                throw new IllegalStateException("HTTP method cannot be null");
+            }
+            if (url == null || url.isBlank()) {
+                throw new IllegalStateException("URL cannot be null or empty");
+            }
+            if (timeoutMillis != null && timeoutMillis <= 0) {
+                throw new IllegalStateException("Timeout must be non-negative");
+            }
+            if (body != null && body.isBlank()) {
+                throw new IllegalStateException("Body must not be blank when provided");
+            }
+            if ((method == HttpMethod.GET || method == HttpMethod.DELETE || method == HttpMethod.HEAD) && body != null) {
+                throw new IllegalStateException(method + " requests must not have a body");
+            }
+            if (contentType != null && body == null) {
+                throw new IllegalStateException("contentType requires a body");
+            }
+            if (body != null && (contentType == null || contentType.isBlank())) {
+                throw new IllegalStateException("Content-Type header is required when body is provided");
+            }
+            if (authorizationHeader != null && authorizationHeader.isBlank()) {
+                throw new IllegalStateException("Authorization header cannot be empty");
+            }
+
         }
     }
 
