@@ -1,5 +1,7 @@
 package com.znaji.builder;
 
+import java.util.Map;
+
 /**
  * HttpMethod method
  * String url
@@ -19,8 +21,10 @@ public class HttpRequest {
     private final String contentType;
     private final String accept;
     private final String authorizationHeader;
+    private final Map<String, String> headers;
+    private final Map<String, String> queryParams;
 
-    private HttpRequest(HttpMethod method, String url, String body, Integer timeoutMillis, boolean followRedirects, String contentType, String accept, String authorizationHeader) {
+    private HttpRequest(HttpMethod method, String url, String body, Integer timeoutMillis, boolean followRedirects, String contentType, String accept, String authorizationHeader, Map<String, String> headers, Map<String, String> queryParams) {
         this.method = method;
         this.url = url;
         this.body = body;
@@ -29,6 +33,8 @@ public class HttpRequest {
         this.contentType = contentType;
         this.accept = accept;
         this.authorizationHeader = authorizationHeader;
+        this.headers = headers;
+        this.queryParams = queryParams;
     }
 
     public static class Builder {
@@ -40,6 +46,8 @@ public class HttpRequest {
         private String contentType;
         private String accept;
         private String authorizationHeader;
+        private Map<String, String> headers = new java.util.LinkedHashMap<>();
+        private Map<String, String> queryParams = new java.util.LinkedHashMap<>();
 
         public Builder(HttpMethod method, String url) {
             this.method = method;
@@ -76,9 +84,31 @@ public class HttpRequest {
             return this;
         }
 
+        public Builder header(String key, String value) {
+            if (key == null || key.isBlank()) {
+                throw new IllegalArgumentException("Header key cannot be null or empty");
+            }
+            if (value == null) {
+                throw new IllegalArgumentException("Header value cannot be null");
+            }
+            headers.put(key, value);
+            return this;
+        }
+
+        public Builder queryParam(String key, String value) {
+            if (key == null || key.isBlank()) {
+                throw new IllegalArgumentException("Query parameter key cannot be null or empty");
+            }
+            if (value == null) {
+                throw new IllegalArgumentException("Query parameter value cannot be null");
+            }
+            queryParams.put(key, value);
+            return this;
+        }
+
         public HttpRequest build() {
             validate();
-            return new HttpRequest(method, url, body, timeoutMillis, followRedirects, contentType, accept, authorizationHeader);
+            return new HttpRequest(method, url, body, timeoutMillis, followRedirects, contentType, accept, authorizationHeader, headers, queryParams);
         }
 
         private void validate() {
@@ -89,7 +119,7 @@ public class HttpRequest {
                 throw new IllegalStateException("URL cannot be null or empty");
             }
             if (timeoutMillis != null && timeoutMillis <= 0) {
-                throw new IllegalStateException("Timeout must be non-negative");
+                throw new IllegalStateException("Timeout must be positive when provided");
             }
             if (body != null && body.isBlank()) {
                 throw new IllegalStateException("Body must not be blank when provided");
@@ -122,6 +152,8 @@ public class HttpRequest {
                 ", contentType=" + contentType +
                 ", accept=" + accept +
                 ", authorizationHeader=" + authorizationHeader +
+                ", headers=" + headers +
+                ", queryParams=" + queryParams +
                 '}';
     }
 
@@ -157,5 +189,12 @@ public class HttpRequest {
         return authorizationHeader;
     }
 
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    public Map<String, String> getQueryParams() {
+        return queryParams;
+    }
 
 }

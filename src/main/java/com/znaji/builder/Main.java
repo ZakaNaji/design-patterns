@@ -52,5 +52,28 @@ public class Main {
             System.out.println("Caught expected exception: " + e.getMessage());
         }
 
+        //valid request with query parameters and headers
+        HttpRequest request7 = new HttpRequest.Builder(HttpMethod.GET, "https://api.example.com/data")
+                .queryParam("search", "test")
+                .queryParam("limit", "10")
+                .header("X-Custom-Header", "value")
+                .build();
+        System.out.println(request7);
+
+        //request - header with repeat key
+        HttpRequest request8 = new HttpRequest.Builder(HttpMethod.GET, "https://api.example.com/data")
+                .header("X-Custom-Header", "value1")
+                .header("X-Custom-Header", "value2") // This will overwrite the previous header
+                .build();
+        System.out.println(request8);
+
+        //invalid request - header with null key
+        try {
+            HttpRequest request9 = new HttpRequest.Builder(HttpMethod.GET, "https://api.example.com/data")
+                    .header(null, "value")
+                    .build();
+        } catch (IllegalArgumentException e) {
+            System.out.println("Caught expected exception: " + e.getMessage());
+        }
     }
 }
