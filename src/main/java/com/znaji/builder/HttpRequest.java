@@ -41,10 +41,10 @@ public class HttpRequest {
         private final HttpMethod method;
         private final String url;
         private String body;
-        private Integer timeoutMillis = null;
-        private boolean followRedirects = false;
+        private Integer timeoutMillis = 5000;
+        private boolean followRedirects = true;
         private String contentType;
-        private String accept;
+        private String accept = "application/json";
         private String authorizationHeader;
         private Map<String, String> headers = new java.util.LinkedHashMap<>();
         private Map<String, String> queryParams = new java.util.LinkedHashMap<>();
