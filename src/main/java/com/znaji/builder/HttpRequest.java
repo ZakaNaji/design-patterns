@@ -1,5 +1,7 @@
 package com.znaji.builder;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -108,7 +110,9 @@ public class HttpRequest {
 
         public HttpRequest build() {
             validate();
-            return new HttpRequest(method, url, body, timeoutMillis, followRedirects, contentType, accept, authorizationHeader, headers, queryParams);
+            var headersCopy = new LinkedHashMap<>(headers);
+            var queryParamsCopy = new LinkedHashMap<>(queryParams);
+            return new HttpRequest(method, url, body, timeoutMillis, followRedirects, contentType, accept, authorizationHeader, Collections.unmodifiableMap(headersCopy), Collections.unmodifiableMap(queryParamsCopy));
         }
 
         private void validate() {
