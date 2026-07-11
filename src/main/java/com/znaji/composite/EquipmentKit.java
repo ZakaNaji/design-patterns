@@ -5,56 +5,69 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public final class EquipmentKit  {
+public final class EquipmentKit implements EquipmentComponent {
 
+    private static final String INDENT = "  ";
     private final String name;
-    private final List<Product> products = new ArrayList<>();
-    //Kit should also accept sub-kits:
-    private final List<EquipmentKit> subKits = new ArrayList<>();
+    private final List<EquipmentComponent> children = new ArrayList<>();
+
 
     public EquipmentKit(String name) {
-        this.name = Objects.requireNonNull(name, "Equipment kit name cannot be null");
+        this.name = requireText(name);
     }
 
-    public String getName() {
+    @Override
+    public String name() {
         return name;
     }
 
-    public List<Product> getProducts() {
-        return new ArrayList<>(products);
+    public void add(EquipmentComponent component) {
+        children.add(Objects.requireNonNull(
+                component,
+                "Component cannot be null"
+        ));
     }
 
-    public void addProduct(Product product) {
-        products.add(Objects.requireNonNull(product, "Product cannot be null"));
+    public void remove(EquipmentComponent component) {
+        children.remove(Objects.requireNonNull(
+                component,
+                "Component cannot be null"
+        ));
     }
 
-    public void addSubKit(EquipmentKit subKit) {
-        subKits.add(Objects.requireNonNull(subKit, "Sub-kit cannot be null"));
+    public List<EquipmentComponent> children() {
+        return List.copyOf(children);
     }
 
-    // Method to calculate the total price of the kit, including sub-kits
-    public BigDecimal totalPrice() {
-        BigDecimal productsTotal = products.stream()
-                .map(Product::getPrice)
+    @Override
+    public BigDecimal price() {
+        return children.stream()
+                .map(EquipmentComponent::price)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        BigDecimal subKitsTotal = subKits.stream()
-                .map(EquipmentKit::totalPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        return productsTotal.add(subKitsTotal);
     }
 
-    // Method to calculate the total weight of the kit, including sub-kits
-    public int totalWeightInGrams() {
-        int productsTotal = products.stream()
-                .mapToInt(Product::getWeightInGrams)
+    @Override
+    public int weightInGrams() {
+        return children.stream()
+                .mapToInt(EquipmentComponent::weightInGrams)
                 .sum();
+    }
 
-        int subKitsTotal = subKits.stream()
-                .mapToInt(EquipmentKit::totalWeightInGrams)
-                .sum();
+    @Override
+    public void print(String indentation) {
+        System.out.println(indentation + "+ " + name);
 
-        return productsTotal + subKitsTotal;
+        String childIndentation = indentation + INDENT;
+
+        children.forEach(
+                child -> child.print(childIndentation)
+        );
+    }
+
+    private String requireText(String text) {
+        if (text == null || text.trim().isEmpty()) {
+            throw new IllegalArgumentException("Text cannot be null or empty");
+        }
+        return text;
     }
 }

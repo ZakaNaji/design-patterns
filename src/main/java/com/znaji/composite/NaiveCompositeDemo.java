@@ -27,14 +27,14 @@ public class NaiveCompositeDemo {
 
         EquipmentKit cookingKit = new EquipmentKit("Cooking Kit");
 
-        cookingKit.addProduct(stove);
-        cookingKit.addProduct(pot);
-
-        EquipmentKit campingKit = new EquipmentKit("Camping Kit");
-        campingKit.addProduct(tent);
-        cookingKit.addSubKit(campingKit);
-
-        BigDecimal totalPrice = checkout.calculatePrice(cookingKit);
-        System.out.println("Total price of the cooking kit: " + totalPrice);
+        //cookingKit.addProduct(stove);
+        //cookingKit.addProduct(pot);
+//
+        //EquipmentKit campingKit = new EquipmentKit("Camping Kit");
+        //campingKit.addProduct(tent);
+        //cookingKit.addSubKit(campingKit);
+//
+        //BigDecimal totalPrice = checkout.calculatePrice(cookingKit);
+        //System.out.println("Total price of the cooking kit: " + totalPrice);
     }
 }
