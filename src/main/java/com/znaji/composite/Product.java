@@ -3,7 +3,7 @@ package com.znaji.composite;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public final class Product implements EquipmentComponent {
+public final class Product extends EquipmentComponent {
 
     private final String name;
     private final BigDecimal price;

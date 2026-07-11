@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public final class EquipmentKit implements EquipmentComponent {
+public final class EquipmentKit extends EquipmentComponent {
 
     private static final String INDENT = "  ";
     private final String name;
@@ -22,24 +22,22 @@ public final class EquipmentKit implements EquipmentComponent {
     }
 
     public void add(EquipmentComponent component) {
-        if (component == this) {
-            throw new IllegalArgumentException("Cannot add a component to itself");
-        }
+        Objects.requireNonNull(component, "Component cannot be null");
 
-        if (component instanceof EquipmentKit kit && kit.containsRecursively(this)) {
-            throw new IllegalArgumentException("Cannot add a component that contains this kit");
-        }
-        children.add(Objects.requireNonNull(
-                component,
-                "Component cannot be null"
-        ));
+        ensureNoCycle(component);
+
+        children.add(component);
+        component.attachTo(this);
     }
 
     public void remove(EquipmentComponent component) {
-        children.remove(Objects.requireNonNull(
-                component,
-                "Component cannot be null"
-        ));
+        Objects.requireNonNull(component, "Component cannot be null");
+
+        if (children.remove(component)) {
+            component.detachFrom(this);
+        } else {
+            throw new IllegalArgumentException("Component not found in this kit");
+        }
     }
 
     public List<EquipmentComponent> children() {
@@ -76,6 +74,16 @@ public final class EquipmentKit implements EquipmentComponent {
             throw new IllegalArgumentException("Text cannot be null or empty");
         }
         return text;
+    }
+
+    private void ensureNoCycle(EquipmentComponent component) {
+        if (component == this) {
+            throw new IllegalArgumentException("Cannot add a component to itself");
+        }
+
+        if (component instanceof EquipmentKit kit && kit.containsRecursively(this)) {
+            throw new IllegalArgumentException("Cannot add a component that contains this kit");
+        }
     }
 
     private boolean containsRecursively(EquipmentComponent child) {
