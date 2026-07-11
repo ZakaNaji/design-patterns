@@ -22,6 +22,13 @@ public final class EquipmentKit implements EquipmentComponent {
     }
 
     public void add(EquipmentComponent component) {
+        if (component == this) {
+            throw new IllegalArgumentException("Cannot add a component to itself");
+        }
+
+        if (component instanceof EquipmentKit kit && kit.containsRecursively(this)) {
+            throw new IllegalArgumentException("Cannot add a component that contains this kit");
+        }
         children.add(Objects.requireNonNull(
                 component,
                 "Component cannot be null"
@@ -69,5 +76,15 @@ public final class EquipmentKit implements EquipmentComponent {
             throw new IllegalArgumentException("Text cannot be null or empty");
         }
         return text;
+    }
+
+    private boolean containsRecursively(EquipmentComponent child) {
+        if (this == child) {
+            return true;
+        }
+        return children.stream()
+                .filter(EquipmentKit.class::isInstance)
+                .map(EquipmentKit.class::cast)
+                .anyMatch(kit -> kit.containsRecursively(child));
     }
 }
